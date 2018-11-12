@@ -34,10 +34,21 @@ RETURN:
    return
 
 stowcheck:
+pause 0.5
 put stow my pass
-if matchre("$righthandnoun", "$corn_incidentals") then put stow right
+#if "$righthand" != "Empty" then put #echo >Log $righthand
+if matchre("$righthand", "$cornkeepers") then
+{
+    #put #echo >Log $righthand
+    put stow right
+}
 else put empty right
-if matchre("$lefthandnoun", "$corn_incidentals") then put stow left
+#if "$lefthand" != "Empty" then put #echo >Log $lefthand
+if matchre("$lefthand", "$cornkeepers") then 
+{
+    #put #echo >Log $lefthand
+    put stow left
+}
 else put empty left
 return
 
