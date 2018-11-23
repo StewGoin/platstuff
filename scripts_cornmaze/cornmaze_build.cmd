@@ -44,7 +44,7 @@ labyrinth_build:
 if matchre("$roomobjs", "scarecrow") then
 {
     evalmath labyrinth_room (%labyrinth_room + 1)
-    goto labyrinth_build
+    goto start
 }
 labyrinth_buildit:
 match left_start You've already built a scarecrow here.
@@ -61,7 +61,7 @@ left_build:
 if matchre("$roomobjs", "scarecrow") then
 {
     evalmath left_room (%left_room + 1)
-    goto left_build
+    goto left_start
 }
 left_buildit:
 match right_start You've already built a scarecrow here.
@@ -78,7 +78,7 @@ right_build:
 if matchre("$roomobjs", "scarecrow") then
 {
     evalmath right_room (%right_room + 1)
-    goto right_build
+    goto right_start
 }
 right_buildit:
 match neck_start You've already built a scarecrow here.
@@ -95,7 +95,7 @@ neck_build:
 if matchre("$roomobjs", "scarecrow") then
 {
     evalmath neck_room (%neck_room + 1)
-    goto neck_build
+    goto neck_start
 }
 neck_buildit:
 match leg_start You've already built a scarecrow here.
@@ -112,7 +112,7 @@ leg_build:
 if matchre("$roomobjs", "scarecrow") then
 {
     evalmath leg_room (%leg_room + 1)
-    goto leg_build
+    goto leg_start
 }
 leg_buildit:
 match back_start You've already built a scarecrow here.
@@ -129,7 +129,7 @@ back_build:
 if matchre("$roomobjs", "scarecrow") then
 {
     evalmath back_room (%back_room + 1)
-    goto back_build
+    goto back_start
 }
 back_buildit:
 match done You've already built a scarecrow here.
