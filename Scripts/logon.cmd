@@ -3,7 +3,6 @@
 waitforre Obvious paths|Obvious exits
 pause
 put #class almanac_timer True
-put #class afk False
 put #class app False
 put #class chatter True
 put #class combat False

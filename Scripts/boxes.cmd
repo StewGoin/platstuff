@@ -1,3 +1,4 @@
+# fix this so the array isn't... lolwut
 #var boxes coffer|crate|strongbox|caddy|casket|skippet|trunk|chest|\bbox\b
 var boxes box|caddy|casket|chest|coffer|crate|skippet|strongbox|trunk
 var box null
