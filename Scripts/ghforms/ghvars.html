@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<!-- Need this to make it IE-11 compatible, else falls back to IE-7 (Boo!) -->
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+		
+		<style>
+			body {margin: 1em 1em;}
+		
+			label 
+			{
+				display: inline-block;
+				width: 10em;
+			}
+			
+			.ui-tooltip 
+			{
+				width:auto;
+				font-size:small;
+			}
+		
+			input[type=button], input[type=submit], input[type=reset] 
+			{
+				background-color: #4CAF50;
+				border: none;
+				color: white;
+				padding: 16px 32px;
+				text-decoration: none;
+				margin: 4px 2px;
+				cursor: pointer;
+			}
+			
+			
+		</style>
+		
+		<script>
+			/* SUPPLIES IE11 COMPATIBILITY WITH FUNCTIONS IN CASE THEY DON'T EXIST */
+			if( ![].forEach)
+			{
+				Array.prototype.forEach = function(callback)
+				{
+					for( var i=0, l=this.length; i<l; i++) callback(this[i]);
+				};
+			}
+
+			if (!Array.prototype.indexOf) {
+			  Array.prototype.indexOf = function indexOf(member, startFrom) {
+				/*
+				In non-strict mode, if the `this` variable is null or undefined, then it is
+				set to the window object. Otherwise, `this` is automatically converted to an
+				object. In strict mode, if the `this` variable is null or undefined, a
+				`TypeError` is thrown.
+				*/
+				if (this == null) {
+				  throw new TypeError("Array.prototype.indexOf() - can't convert `" + this + "` to object");
+				}
+
+				var
+				  index = isFinite(startFrom) ? Math.floor(startFrom) : 0,
+				  that = this instanceof Object ? this : new Object(this),
+				  length = isFinite(that.length) ? Math.floor(that.length) : 0;
+
+				if (index >= length) {
+				  return -1;
+				}
+
+				if (index < 0) {
+				  index = Math.max(length + index, 0);
+				}
+
+				if (member === undefined) {
+				  /*
+					Since `member` is undefined, keys that don't exist will have the same
+					value as `member`, and thus do need to be checked.
+				  */
+				  do {
+					if (index in that && that[index] === undefined) {
+					  return index;
+					}
+				  } while (++index < length);
+				} else {
+				  do {
+					if (that[index] === member) {
+					  return index;
+					}
+				  } while (++index < length);
+				}
+
+				return -1;
+			  };
+			}
+			/* IE COMPATIBILITY END */
+		
+			/* plugin calls */			
+			//Send passes a string to be sent straight to Genie as input, whatever that command it (no filtering)
+			//E.g., CS_Send("put #var hello world");
+			function CS_Send(data)
+			{
+				if ('Send' in window.external)
+					window.external.Send(data);
+				else
+					console.log("'Send' function does not exist in external context");
+			}
+			
+			//SetValues requires json string; use JSON.stringify(json_formatted_data) to correctly send it.
+			//Arrays are not allowed.
+			//E.g., {key: value, key2: value2}
+			function CS_SetValues(jsonstring)
+			{
+				if ('SetValues' in window.external)
+					window.external.SetValues(jsonstring);
+				else
+					console.log("'SetValues' function does not exist in external context");
+			}
+
+			//GetValue requires a string global variable name without the preceding $
+			//E.g., CS_GetValue("health") returns $health
+			function CS_GetValue(varname)
+			{
+				if ('GetValue' in window.external)
+					return window.external.GetValue(varname);
+				else
+					console.log("'GetValue' function does not exist in external context");
+				return "";
+			}
+			
+			//Receive is invoked by the plugin to pass data from Genie normally by script or user
+			//which is a string converted to an object.
+			//E.g., CS_Receive(data) => now to inspect data and see what it contains
+			function CS_Receive(data)
+			{
+				//do nothing
+				//document.body.innerText = data;
+			}
+			/* end of plugin calls */
+		
+		
+		
+			$( function() {
+				$(".accordion").accordion();
+				
+				$("#gh_setup").submit(function( event ) {
+					event.preventDefault();
+					var jsondata = {};
+					if (!$("#cambrinth").val()) $("#cambrinth").val("NO");
+					if (!$("#secondcambrinth").val()) $("#secondcambrinth").val("NO");
+					$("[type=text]").each(function(i, element) {
+						jsondata[element.name] = (element.value) ? (element.value) : "";
+					});
+					
+					CS_SetValues(JSON.stringify(jsondata));
+				});
+				
+				//build the list of current settings
+				var varlist = [
+					"GH_CONTAINER_BOW_AMMO",
+					"GH_CONTAINER_XB_AMMO",
+					"GH_CONTAINER_SLING_AMMO",
+					"GH_CONTAINER_BLOWGUN_AMMO",
+					"GH_CONTAINER_QUIVER",
+					"GH_CONTAINER_LT_SHEATH",
+					"GH_CONTAINER_HT_SHEATH",
+					"GH_CONTAINER_BOX_CONTAINER",
+					"GH_CONTAINER_GEM_CONTAINER",
+					"GH_CONTAINER_JUNK_CONTAINER",
+					"GH_CONTAINER_DEFAULT_CONTAINER",
+					"GH_CONTAINER_POUCH_CONTAINER",
+					"PREP_MESSAGE",
+					"cambrinth",
+					"secondcambrinth",
+					"focusr",
+					"focusc",
+					"rstance"			
+				];
+				
+				varlist.forEach(function(varname){
+					var value = CS_GetValue(varname);
+					console.log(varname + " = " + value);
+
+					if (value)
+						$("#"+varname).val(value);
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<h1>GH SETUP</h1>
+		<form id="gh_setup" name="gh_setup">
+			<div class="accordion">
+				<h3>Weapon and Ammo Containers</h3>
+				<div>
+					<div>
+					  <label for="GH_CONTAINER_BOW_AMMO">Bow Ammo</label>
+					  <input type="text"  id="GH_CONTAINER_BOW_AMMO" name="GH_CONTAINER_BOW_AMMO" title="container for bow ammo">
+					</div>
+					<div>
+					  <label for="GH_CONTAINER_XB_AMMO">Crossbow Ammo</label>
+					  <input type="text"  id="GH_CONTAINER_XB_AMMO" name="GH_CONTAINER_XB_AMMO" title="container for crossbow ammo">
+					</div>
+					<div>
+					  <label for="GH_CONTAINER_SLING_AMMO">Sling Ammo</label>
+					  <input type="text"  id="GH_CONTAINER_SLING_AMMO" name="GH_CONTAINER_SLING_AMMO" title="container for sling ammo">
+					</div>
+					<div>
+					  <label for="GH_CONTAINER_BLOWGUN_AMMO">Blowgun Ammo</label>
+					  <input type="text"  id="GH_CONTAINER_BLOWGUN_AMMO" name="GH_CONTAINER_BLOWGUN_AMMO" title="container for blowgun ammo">
+					</div>
+					<div>
+					  <label for="GH_CONTAINER_QUIVER">Quiver</label>
+					  <input type="text"  id="GH_CONTAINER_QUIVER" name="GH_CONTAINER_QUIVER" title="default ammunition container">
+					</div>
+					<div>
+					  <label for="GH_CONTAINER_LT_SHEATH">LT Sheath</label>
+					  <input type="text"  id="GH_CONTAINER_LT_SHEATH" name="GH_CONTAINER_LT_SHEATH" title="the container where you store LT weapons">
+					</div>
+					<div>
+					  <label for="GH_CONTAINER_HT_SHEATH">HT Sheath</label>
+					  <input type="text"  id="GH_CONTAINER_HT_SHEATH" name="GH_CONTAINER_HT_SHEATH" title="the container where you store HT weapons">
+					</div>
+				</div>
+				<h3>Loot Containers</h3>
+				<div>
+					<div>
+					  <label for="GH_CONTAINER_BOX_CONTAINER">Box Container</label>
+					  <input type="text"  id="GH_CONTAINER_BOX_CONTAINER" name="GH_CONTAINER_BOX_CONTAINER" title="the container where you store boxes">
+					</div>
+					<div>
+					  <label for="GH_CONTAINER_GEM_CONTAINER">Gem Container</label>
+					  <input type="text"  id="GH_CONTAINER_GEM_CONTAINER" name="GH_CONTAINER_GEM_CONTAINER" title="the container where you store gems">
+					</div>
+					<div>
+					  <label for="GH_CONTAINER_JUNK_CONTAINER">Junk Container</label>
+					  <input type="text"  id="GH_CONTAINER_JUNK_CONTAINER" name="GH_CONTAINER_JUNK_CONTAINER" title="the container where you store junk">
+					</div>
+					<div>
+					  <label for="GH_CONTAINER_DEFAULT_CONTAINER">Default Container</label>
+					  <input type="text"  id="GH_CONTAINER_DEFAULT_CONTAINER" name="GH_CONTAINER_DEFAULT_CONTAINER" title="your default container (for example, pack)">
+					</div>
+					<div>
+					  <label for="GH_CONTAINER_POUCH_CONTAINER">Pouch Container</label>
+					  <input type="text"  id="GH_CONTAINER_POUCH_CONTAINER" name="GH_CONTAINER_POUCH_CONTAINER" title="the container where you store pouches">
+					</div>
+				</div>
+				<h3>Cambrinth and Ritual Settings</h3>
+				<div>
+					<div>
+					  <label for="PREP_MESSAGE">Prep Message</label>
+					  <input type="text"  id="PREP_MESSAGE" name="PREP_MESSAGE" title="Your spell preparation messaging. (Use the full, exact messaging up to the spell name.)">
+					</div>
+					<div>
+					  <label for="cambrinth">Main Cambrinth</label>
+					  <input type="text"  id="cambrinth" name="cambrinth" title="your primary cambrinth item">
+					</div>
+					<div>
+					  <label for="secondcambrinth">Second Cambrinth</label>
+					  <input type="text"  id="secondcambrinth" name="secondcambrinth" title="your secondary cambrinth item">
+					</div>
+					<div>
+					  <label for="focusr">Ritual Focus</label>
+					  <input type="text"  id="focusr" name="focusr" title="the item you use to cast ritual spells">
+					</div>
+					<div>
+					  <label for="focusc">Focus Container</label>
+					  <input type="text"  id="focusc" name="focusc" title="If your focus is worn, set as WORN. Otherwise, set as the container where it's stored.">
+					</div>
+					<div>
+					  <label for="rstance">Ritual Stance</label>
+					  <input type="text"  id="rstance" name="rstance" title="Your best defensive stance to use during ritual spells. Set as all numbers: [EVASION #] [PARRY #] [SHIELD #] [ATTACK #">
+					</div>
+				</div>
+			</div>
+			<input type="submit" value="Submit">
+		</form>
+	</body>
+</html>

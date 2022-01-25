@@ -1,0 +1,45 @@
+<Genie>
+  <Windows WindowCount="9">
+    <Main Maximized="True" />
+    <MonoFont Family="Lucida Console" Size="9.75" Style="Regular" />
+    <Game Name="Game" Height="660" Width="913" Left="0" Top="211" TimeStamp="False" Colors="WhiteSmoke, Black" NameListOnly="False">
+      <Font Family="Verdana" Size="9.75" Style="Regular" />
+    </Game>
+    <Window1 Name="Inventory" Height="200" Width="300" Left="10" Top="10" Visible="False" TimeStamp="False" Colors="WhiteSmoke, Black" NameListOnly="False">
+      <Font Family="Verdana" Size="9" Style="Regular" />
+    </Window1>
+    <Window2 Name="Familiar" Height="200" Width="300" Left="10" Top="10" Visible="False" TimeStamp="False" Colors="WhiteSmoke, Black" NameListOnly="False">
+      <Font Family="Verdana" Size="9" Style="Regular" />
+    </Window2>
+    <Window3 Name="Thoughts" Height="118" Width="596" Left="680" Top="0" Visible="False" TimeStamp="True" Colors="WhiteSmoke, Black" NameListOnly="False">
+      <Font Family="Verdana" Size="9" Style="Regular" />
+    </Window3>
+    <Window4 Name="Logons" Height="135" Width="229" Left="680" Top="0" Visible="True" TimeStamp="True" Colors="WhiteSmoke, Black" NameListOnly="False">
+      <Font Family="Verdana" Size="9" Style="Regular" />
+    </Window4>
+    <Window5 Name="Deaths" Height="118" Width="163" Left="680" Top="93" Visible="False" TimeStamp="True" Colors="WhiteSmoke, Black" NameListOnly="False">
+      <Font Family="Verdana" Size="9" Style="Regular" />
+    </Window5>
+    <Window6 Name="Log" Height="509" Width="367" Left="909" Top="362" Visible="True" TimeStamp="True" Colors="WhiteSmoke, Black" NameListOnly="False">
+      <Font Family="Verdana" Size="8.25" Style="Regular" />
+    </Window6>
+    <Window7 Name="Room" Height="211" Width="680" Left="0" Top="0" Visible="True" TimeStamp="False" Colors="WhiteSmoke, Black" NameListOnly="False">
+      <Font Family="Verdana" Size="9" Style="Regular" />
+    </Window7>
+    <Window8 Name="Experience" Height="362" Width="365" Left="911" Top="0" Visible="True" TimeStamp="False" Colors="WhiteSmoke, Black" NameListOnly="False">
+      <Font Family="Lucida Console" Size="8.25" Style="Regular" />
+    </Window8>
+    <Window9 Name="Time" Height="76" Width="233" Left="680" Top="135" Visible="True" TimeStamp="False" Colors="WhiteSmoke, Black" NameListOnly="False">
+      <Font Family="Verdana" Size="8.25" Style="Regular" />
+    </Window9>
+    <Window10 Name="Assess" Height="184" Width="362" Left="914" Top="400" Visible="False" TimeStamp="False" Colors="WhiteSmoke, Black" NameListOnly="False">
+      <Font Family="Verdana" Size="8.25" Style="Regular" />
+    </Window10>
+  </Windows>
+  <Settings>
+  </Settings>
+  <ScriptBar Visible="True" />
+  <IconBar Visible="True" Dock="Top" />
+  <HealthBar Visible="True" Magic="True" Dock="Bottom" />
+  <StatusBar Visible="False" />
+</Genie>

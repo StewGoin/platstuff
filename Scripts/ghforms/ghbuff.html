@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<!-- Need this to make it IE-11 compatible, else falls back to IE-7 (Boo!) -->
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta charset="UTF-8">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+		<style>
+			body{height:4000px}
+			.short-spell-option {width:6em}
+			.gh_setting:nth-child(even) {background-color:#eef}
+			.gh_setting:hover { background-color: #FFFFDD }
+
+			.delete_spell
+			{
+				background-color: #AF4C50;
+				border: none;
+				color: white;
+				text-decoration: none;
+				cursor: pointer;
+			}
+
+			#spells>div:nth-child(even) {background-color:#eef}
+		</style>
+
+		<script>
+			/* plugin calls */
+			//Send passes a string to be sent straight to Genie as input, whatever that command it (no filtering)
+			//E.g., CS_Send("put #var hello world");
+			function CS_Send(data)
+			{
+				if ('Send' in window.external)
+					window.external.Send(data);
+				else
+					console.log("'Send' function does not exist in external context");
+			}
+
+			//SetValues requires json string; use JSON.stringify(json_formatted_data) to correctly send it.
+			//Arrays are not allowed.
+			//E.g., {key: value, key2: value2}
+			function CS_SetValues(jsonstring)
+			{
+				if ('SetValues' in window.external)
+					window.external.SetValues(jsonstring);
+				else
+					console.log("'SetValues' function does not exist in external context");
+			}
+
+			//GetValue requires a string global variable name without the preceding $
+			//E.g., CS_GetValue("health") returns $health
+			function CS_GetValue(varname)
+			{
+				if ('GetValue' in window.external)
+					return window.external.GetValue(varname);
+				else
+					console.log("'GetValue' function does not exist in external context");
+				return "";
+			}
+
+			//Receive is invoked by the plugin to pass data from Genie normally by script or user
+			//which is a string converted to an object.
+			//E.g., CS_Receive(data) => now to inspect data and see what it contains
+			function CS_Receive(data)
+			{
+				//do nothing
+				//document.body.innerText = data;
+			}
+			/* end of plugin calls */
+
+
+			//possible values:
+			//case 1: true|yes|on|1
+			//case 2: false|no|off|0
+			//case 3: "some string"
+			//case 4: ""
+
+			//allowable values by name
+			var value_map = {
+				"buff.trace": [/(YES|NO)/,"NO"],
+				"buff.spells": [/(.+)/, ""],
+				"buff.prep": [/(.+)/, 1],
+				"buff.charge.total": [/(\d+)/,1],
+				"buff.charge.total2": [/(\d+)/,0],
+				"buff.charge.increment": [/(\d+)/,1],
+				"buff.harness": [/(YES|NO)/, "NO"],
+				"buff.harness.total": [/(\d+)/, 0],
+				"buff.harness.increment": [/(\d+)/, 1],
+				"buff.cambrinth": [/(.+)/, "NO"],
+				"buff.secondcambrinth": [/(.+)/, "NO"],
+				"buff.worn": [/(YES|NO)/, "NO"],
+				"buff.remove": [/(YES|NO)/, "NO"],
+				"buff.prep.message": [/(.+)/, ""],
+				"buff.continue": [/(YES|NO)/, "NO"],
+				"buff.manalevel": [/(\d+)/, 1],
+				"buff.immortal": [/(\w+)/, ""],
+				"buff.ba.thrown": [/(YES|NO)/, "NO"]
+			};
+
+			function getMappedValue(varname, value)
+			{
+				if (!value)
+					return value_map[varname][1];
+				if (varname in value_map)
+				{
+					var matches = value.toString().toUpperCase().match( value_map[varname][0] );
+					if (matches)
+					{
+						if (matches.length > 1)
+							return value;
+					}
+					return value_map[varname][1];
+				}
+				return "";
+			}
+
+			function deleteSpell(element)
+			{
+				$(element).parents(".spell").remove();
+			}
+			
+			function addSpell(spell, prep, ctotal, ctotal2, /*cincrement,*/ htotal/*, hincrement*/)
+			{
+				var e = $(".spell_template").clone().appendTo("#spells").show().removeClass("spell_template");
+				e.find("[class~='buff.spells']").val(spell);
+				e.find("[class~='buff.prep']").val(prep);
+				e.find("[class~='buff.charge.total']").val(ctotal);
+				e.find("[class~='buff.charge.total2']").val(ctotal2);
+				//e.find("[class~='buff.charge.increment']").val(cincrement);
+				e.find("[class~='buff.harness.total']").val(htotal);
+				//e.find("[class~='buff.harness.increment']").val(hincrement);
+			}
+			
+			//build the list of current settings
+			var varlist = [
+				"buff.trace",
+				"buff.harness",
+				"buff.harness.increment", //moved here because .hunt doesn't use it properly
+				"buff.charge.increment", //moved here because .hunt doesn't use it properly
+				"buff.cambrinth",
+				"buff.secondcambrinth",
+				"buff.worn",
+				"buff.remove",
+				"buff.prep.message",
+				"buff.continue",
+				"buff.manalevel",
+				"buff.immortal",
+				"buff.ba.thrown"
+			];
+			
+			var arrayvarlist = [
+				"buff.spells",
+				"buff.prep",
+				"buff.charge.total",
+				"buff.charge.total2",
+				//"buff.charge.increment",
+				"buff.harness.total"//,
+				//"buff.harness.increment",				
+			];
+
+			$(function(){
+			
+				//turn a bunch of jquery elements into a pipe-delimited array string for Genie
+				function getArrayString(varname, elements)
+				{
+					if (!elements)
+						return "";
+					
+					if (elements.length == 1)
+						return (elements[0].val());
+						
+					var list = [];
+					elements.each(function(){
+						var value = $(this).val();
+						if (value)
+							list.push(getMappedValue(varname, value.toString().toUpperCase()));
+						/*alert(varname + "\r\n" + $(this).val() + "\r\n" + getMappedValue(varname, $(this).val()));*/
+					});
+					return list.join('|');
+				}
+
+				//modify submission to concatenate all spell data
+				$("#ghbuff_form").submit(function( event ) {
+					event.preventDefault();
+					var jsondata = {};
+
+					varlist.forEach(function(varname){
+						var element = $("[id='"+varname+"']");
+						if (element.prop("type") == "checkbox")
+							jsondata[varname] = (element.prop("checked") ? "YES" : "NO");
+						else
+							jsondata[varname] = getMappedValue(varname, element.val());
+					});
+					console.log(jsondata);
+					
+					//get and reduce all "buff.spells" to a single value delimited by pipes, '|'
+					jsondata["buff.spells"] = 	getArrayString('buff.spells', $("[class~='buff.spells']"));
+					jsondata["buff.prep"] = 	getArrayString('buff.prep', $("[class~='buff.prep']"));
+					jsondata["buff.charge.total"] = 	getArrayString('buff.charge.total', $("[class~='buff.charge.total']"));
+					jsondata["buff.charge.total2"] = 	getArrayString('buff.charge.total2', $("[class~='buff.charge.total2']"));
+					//jsondata["buff.charge.increment"] = 	getArrayString('buff.charge.increment', $("[class~='buff.charge.increment']"));
+					jsondata["buff.harness.total"] = 	getArrayString('buff.harness.total', $("[class~='buff.harness.total']"));
+					//jsondata["buff.harness.increment"] = 	getArrayString('buff.harness.increment', $("[class~='buff.harness.increment']"));
+
+					//CS_Send("#echo " + JSON.stringify(jsondata));
+					CS_SetValues(JSON.stringify(jsondata));
+					
+					var spell_inits = {};
+					$("[class~='buff.spells']").each(function(){
+						var value = $(this).val();
+						if (value)
+							spell_inits[value.toString().toUpperCase()] = "OFF";
+					});
+					CS_SetValues(JSON.stringify(spell_inits));
+				});
+
+				//load all vars from Genie into the form
+				varlist.forEach(function(varname){
+					var value = CS_GetValue(varname);
+					if (!value)
+						value = "";
+
+					var mapped = getMappedValue(varname, value);
+					if (mapped == "YES")
+						$("[id='"+varname+"']").prop("checked", true);
+					else
+						$("[id='"+varname+"']").val(mapped);
+				});
+				
+
+				function getArrayVar(varname)
+				{
+					var value = CS_GetValue(varname);
+					if (!value)
+						return [];
+					else
+						return value.split('|');
+				}
+				
+				function IndexAt(list, index)
+				{
+					if (!Array.isArray(list))
+						return list;
+
+					if (index >= list.length)
+						return "";
+						
+					return list[index];
+				}
+				
+				//special consideration for spell array
+				var spells = getArrayVar("buff.spells");
+				var preps = getArrayVar("buff.prep");
+				var bct = getArrayVar("buff.charge.total");
+				var bct2 = getArrayVar("buff.charge.total2");
+				//var bci = getArrayVar("buff.charge.increment");
+				var bht = getArrayVar("buff.harness.total");
+				//var bhi = getArrayVar("buff.harness.increment");
+				
+				if (Array.isArray(spells))
+				{
+					for (var i=0;i<spells.length;++i)
+					{
+						addSpell(
+							IndexAt(spells,i), 
+							IndexAt(preps,i), 
+							IndexAt(bct,i), 
+							IndexAt(bct2,i), 
+							//IndexAt(bci,i), 
+							IndexAt(bht,i)//, 
+							/*IndexAt(bhi,i)*/);
+					}
+				}
+			});
+		</script>
+	</head>
+	<body>
+		<form id="ghbuff_form">
+
+			<h3>Spells List</h3>
+			<div id="spell_controls">
+				<input type="button" value="Add Another Spell" class="add_spell" onclick="addSpell();" />
+			</div>
+			<div id="spells">
+			</div>
+			<div class="spell_template spell" style="display:none">
+				<table>
+					<tr>
+						<td>
+				<label title="These are the spells you wish to cast. This is usually the shortened version of the spell name. I.e., COUR = Courage, AS = Anti Stun">Spell (Abbreviated):</label>
+						</td>
+						<td>
+				<input type="text" class="buff.spells short-spell-option" />
+						</td>
+						<td>
+				<label title="This is the amount of mana you want to prep the corresponding spell to.">Prep Amount:</label>
+						</td>
+						<td>
+				<input type="text" class="buff.prep short-spell-option" maxlength="4" />
+						</td>
+					</tr>
+					<tr>
+						<td>
+				<label title="This is the amount you're going to charge a cambrinth item to.">Cambrinth Charge:</label>
+						</td>
+						<td>
+				<input type="text" class="buff.charge.total short-spell-option" maxlength="4" />
+						</td>
+						<td>
+				<label title="This is the amount you're going to change a second cambrinth item to. Leave blank if not using a second cambrinth.">Second Cambrinth Charge:</label>
+						</td>
+						<td>
+				<input type="text" class="buff.charge.total2 short-spell-option" maxlength="4" />
+						</td>
+					</tr>
+					<tr>
+						<td>
+				<label title="This is the total amount you are going to harness to.  Can be used in addition to or in place of charging cambrinth.">Harness Total:</label>
+						</td>
+						<td>
+				<input type="text" class="buff.harness.total short-spell-option" maxlength="4" />
+						</td>
+						<td>
+				<input type="button" value="X" class="delete_spell" onclick="deleteSpell(this);" />
+						</td>
+					</tr>
+				</table>
+			</div>
+
+			<h3>Options</h3>
+			<div id="options">
+				<div class="gh_setting">
+					<input type="checkbox" id="buff.continue">
+					<label for="buff.continue" title="Set if you want the script to cast all spells before returning to the script that included this one.">Cast All Buffs?</label>
+				</div>
+				<div class="gh_setting">
+					<input type="checkbox" id="buff.harness">
+					<label for="buff.harness" title="Whether to harness mana prior to casting a spell.">Enable Harnessing?</label>
+				</div>
+				
+				<div class="gh_setting">
+					<label title="This is the amount to harness each time up to buff.harness.total amount.">Harness Increment:</label>
+					<input type="text" id="buff.harness.increment" class="short-spell-option" maxlength="4" />
+				</div>
+				<div class="gh_setting">
+					<label title="This is how much the script will charge the cambrinth per attempt, up to the max.">Charge Increment:</label>
+					<input type="text" id="buff.charge.increment" class="short-spell-option" maxlength="4" />
+				</div>
+				
+				
+				<div class="gh_setting">
+					<label for="buff.cambrinth" title="The cambrinth item you are using. Set to NO to use no cambrinth.">Cambrinth Item:</label>
+					<input type="text" id="buff.cambrinth" />
+				</div>
+				<div class="gh_setting">
+					<label for="buff.secondcambrinth" title="The second cambrinth item you are using. Set to NO to use no cambrinth.">Second Cambrinth:</label>
+					<input type="text" id="buff.secondcambrinth" />
+				</div>
+				<div class="gh_setting">
+					<input type="checkbox" id="buff.worn">
+					<label for="buff.worn" title="Is the cambrinth item(s) specified above worn?">Cambrinth Items are Worn?</label>
+				</div>
+				<div class="gh_setting">
+					<input type="checkbox" id="buff.remove">
+					<label for="buff.remove" title="If the cambrinth is set as worn in the above script, do you need to remove it to charge/invoke?">Remove Cambrinth Before Charging?</label>
+				</div>
+				<div class="gh_setting">
+					<label for="buff.prep.message" title="The messaging for your character when they begin to prepare a spell.">Spell Prep Message:</label>
+					<input type="text" id="buff.prep.message" />
+				</div>
+				
+				
+				<div class="gh_setting">
+					<input type="checkbox" id="buff.trace">
+					<label for="buff.trace" title="If you are a Paladin with the Glyph of Mana ability, and you wish to use it in this script.">Enable Glyph of Mana (Paladin only)</label>
+				</div>
+				<div class="gh_setting">
+					<label for="buff.manalevel" title="If using Glyph of Mana it will trace at this level or lower.">GoM mana level (Paladin only):</label>
+					<input type="text" id="buff.manalevel" class="short-spell-option" maxlength="4" />
+				</div>
+				<div class="gh_setting">
+					<label for="buff.immortal" title="Use this to set which Immortal to cast Benediction at.">Immortal Name (Benediction):</label>
+					<input type="text" id="buff.immortal" />
+				</div>
+				<div class="gh_setting">
+					<input type="checkbox" id="buff.ba.thrown">
+					<label for="buff.ba.thrown" title="Check to use the Bond Armaments spell on thrown weapons, otherwise uses it on all.">Bond Armaments on Thrown Weapons only?</label>
+				</div>
+			</div>
+			<div>
+				<input type="submit" value="Submit" />
+			</div>
+		</form>
+	</body>
+</html>

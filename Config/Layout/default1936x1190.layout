@@ -1,0 +1,88 @@
+<Genie>
+  <Windows WindowCount="24">
+    <Main Maximized="True" />
+    <MonoFont Family="Lucida Console" Size="9.75" Style="Regular" />
+    <InputFont Family="Lucida Console" Size="9" Style="Regular" />
+    <Game ID="main" Name="Game" Height="836" Width="1108" Left="0" Top="190" TimeStamp="False" Colors="WhiteSmoke, Black" NameListOnly="False">
+      <Font Family="Verdana" Size="9.75" Style="Regular" />
+    </Game>
+    <Window1 ID="inv" Name="Inventory" Height="200" Width="300" Left="10" Top="10" Visible="False" TimeStamp="False" Colors="WhiteSmoke, Black" NameListOnly="False">
+      <Font Family="Verdana" Size="9" Style="Regular" />
+    </Window1>
+    <Window2 ID="familiar" Name="Familiar" Height="200" Width="300" Left="10" Top="10" Visible="False" TimeStamp="False" Colors="WhiteSmoke, Black" NameListOnly="False">
+      <Font Family="Verdana" Size="9" Style="Regular" />
+    </Window2>
+    <Window3 ID="thoughts" Name="Thoughts" IfClosed="log" Height="457" Width="468" Left="1019" Top="0" Visible="False" TimeStamp="True" Colors="WhiteSmoke, Black" NameListOnly="False">
+      <Font Family="Verdana" Size="9.75" Style="Regular" />
+    </Window3>
+    <Window4 ID="logons" Name="Logons" Height="190" Width="282" Left="768" Top="0" Visible="False" TimeStamp="True" Colors="WhiteSmoke, Black" NameListOnly="False" IfClosed="log">
+      <Font Family="Verdana" Size="11.25" Style="Regular" />
+    </Window4>
+    <Window5 ID="deaths" Name="Deaths" IfClosed="main" Height="118" Width="163" Left="680" Top="93" Visible="False" TimeStamp="True" Colors="WhiteSmoke, Black" NameListOnly="False">
+      <Font Family="Verdana" Size="9" Style="Regular" />
+    </Window5>
+    <Window6 ID="log" Name="Log" Height="474" Width="808" Left="1108" Top="552" Visible="True" TimeStamp="True" Colors="WhiteSmoke, Black" NameListOnly="False">
+      <Font Family="Verdana" Size="9.75" Style="Regular" />
+    </Window6>
+    <Window7 ID="room" Name="Room" Height="190" Width="1108" Left="0" Top="0" Visible="True" TimeStamp="False" Colors="WhiteSmoke, Black" NameListOnly="False">
+      <Font Family="Verdana" Size="9" Style="Regular" />
+    </Window7>
+    <Window8 ID="experience" Name="Experience" Height="432" Width="326" Left="1590" Top="0" Visible="True" TimeStamp="False" Colors="WhiteSmoke, Black" NameListOnly="False">
+      <Font Family="Lucida Console" Size="9" Style="Regular" />
+    </Window8>
+    <Window9 ID="time" Name="Time" Height="120" Width="163" Left="1753" Top="432" Visible="True" TimeStamp="False" Colors="WhiteSmoke, Black" NameListOnly="False">
+      <Font Family="Verdana" Size="8.25" Style="Regular" />
+    </Window9>
+    <Window10 ID="atmospherics" Name="Atmospherics" IfClosed="main" Height="120" Width="645" Left="1108" Top="432" Visible="True" TimeStamp="True" Colors="WhiteSmoke, Black" NameListOnly="False">
+      <Font Family="Verdana" Size="9.75" Style="Regular" />
+    </Window10>
+    <Window11 ID="talk" Name="Talk" IfClosed="log" Height="517" Width="467" Left="1019" Top="453" Visible="False" TimeStamp="True" Colors="WhiteSmoke, Black" NameListOnly="False">
+      <Font Family="Verdana" Size="11.25" Style="Regular" />
+    </Window11>
+    <Window12 ID="whispers" Name="Whispers" IfClosed="log" Height="200" Width="300" Left="10" Top="10" Visible="False" TimeStamp="False" Colors="WhiteSmoke, Black" NameListOnly="False">
+      <Font Family="Verdana" Size="9" Style="Regular" />
+    </Window12>
+    <Window13 ID="conversation" Name="Conversation" IfClosed="log" Height="513" Width="468" Left="1019" Top="457" Visible="False" TimeStamp="False" Colors="WhiteSmoke, Black" NameListOnly="False">
+      <Font Family="Verdana" Size="11.25" Style="Regular" />
+    </Window13>
+    <Window14 ID="hostmsg" Name="Host Messages" IfClosed="log" Height="200" Width="300" Left="10" Top="10" Visible="False" TimeStamp="False" Colors="WhiteSmoke, Black" NameListOnly="False">
+      <Font Family="Verdana" Size="9" Style="Regular" />
+    </Window14>
+    <Window15 ID="assess" Name="Assess" Height="200" Width="300" Left="10" Top="10" Visible="False" TimeStamp="False" Colors="WhiteSmoke, Black" NameListOnly="False">
+      <Font Family="Verdana" Size="9" Style="Regular" />
+    </Window15>
+    <Window16 ID="group" Name="Group" IfClosed="" Height="200" Width="300" Left="10" Top="10" Visible="False" TimeStamp="False" Colors="WhiteSmoke, Black" NameListOnly="False">
+      <Font Family="Verdana" Size="9" Style="Regular" />
+    </Window16>
+    <Window17 ID="shopwindow" Name="Shopping" Height="313" Width="284" Left="934" Top="567" Visible="False" TimeStamp="False" Colors="WhiteSmoke, Black" NameListOnly="False">
+      <Font Family="Verdana" Size="9" Style="Regular" />
+    </Window17>
+    <Window18 ID="events" Name="Events" Height="313" Width="284" Left="934" Top="567" Visible="False" TimeStamp="True" Colors="WhiteSmoke, Black" NameListOnly="False" IfClosed="log">
+      <Font Family="Verdana" Size="9.75" Style="Regular" />
+    </Window18>
+    <Window19 ID="players" Name="Players" IfClosed="" Height="294" Width="163" Left="1427" Top="138" Visible="True" TimeStamp="False" Colors="WhiteSmoke, Black" NameListOnly="False">
+      <Font Family="Verdana" Size="8.25" Style="Regular" />
+    </Window19>
+    <Window20 ID="mobs" Name="Mobs" IfClosed="" Height="138" Width="482" Left="1108" Top="0" Visible="True" TimeStamp="False" Colors="WhiteSmoke, Black" NameListOnly="False">
+      <Font Family="Verdana" Size="8.25" Style="Regular" />
+    </Window20>
+    <Window21 ID="ooc" Name="OOC" IfClosed="" Height="200" Width="300" Left="10" Top="10" Visible="False" TimeStamp="False" Colors="WhiteSmoke, Black" NameListOnly="False">
+      <Font Family="Verdana" Size="9" Style="Regular" />
+    </Window21>
+    <Window22 ID="raw" Name="Raw" IfClosed="" Height="200" Width="300" Left="10" Top="10" Visible="False" TimeStamp="False" Colors="WhiteSmoke, Black" NameListOnly="False">
+      <Font Family="Verdana" Size="9" Style="Regular" />
+    </Window22>
+    <Window23 ID="frenemies" Name="Frenemies" Height="79" Width="319" Left="1108" Top="0" Visible="False" TimeStamp="False" Colors="WhiteSmoke, Black" NameListOnly="False">
+      <Font Family="Verdana" Size="8.25" Style="Regular" />
+    </Window23>
+    <Window24 ID="objects" Name="Objects" Height="294" Width="319" Left="1108" Top="138" Visible="True" TimeStamp="False" Colors="WhiteSmoke, Black" NameListOnly="False">
+      <Font Family="Verdana" Size="8.25" Style="Regular" />
+    </Window24>
+  </Windows>
+  <Settings>
+  </Settings>
+  <ScriptBar Visible="True" Dock="Top" />
+  <IconBar Visible="True" Dock="Bottom" />
+  <HealthBar Visible="True" Magic="True" Dock="Bottom" />
+  <StatusBar Visible="False" />
+</Genie>

@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<!-- Need this to make it IE-11 compatible, else falls back to IE-7 (Boo!) -->
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta charset="UTF-8">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+		<script src="./formbuilder.js"></script>
+		<script src="./ghform.js"></script>
+		
+		<style>
+			*{padding:0;margin:0}
+
+			body
+			{
+				background-color: #eee;
+				background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.24'%3E%3Cpath opacity='.25' d='M96 95h4v1h-4v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9zm-1 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9z'/%3E%3Cpath d='M6 5V0H5v5H0v1h5v94h1V6h94V5H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+				overflow:scrollbar;
+				/* resize scrollbar fix */
+				min-height: 2500px;
+			}
+
+			h1,h2,h3,h4,h5,h6
+			{
+				margin-top:0.5em;
+				clear:both;
+			}
+			
+			ul {padding-left:1em}
+
+			.fixed-header
+			{
+				padding:0.25em;
+				position:fixed;
+				background-color:#ddd;
+				top:0;
+				left:0;
+				width:100%;
+				border:1px solid black;
+			}
+			
+			.content
+			{
+				margin-top:8em;
+				width:100%;
+			}
+
+			.row
+			{
+				display:table;
+				width:100%
+			}
+
+			.row:after
+			{
+				content:"";
+				display:table;
+				clear:both;
+			}
+
+			@media (min-width:601px)
+			{
+				.column
+				{
+					width:49%;
+					float:left;
+					background:white;
+					border:1px solid black;
+				}
+			}
+			@media (max-width:600px)
+			{
+				.column
+				{
+					background:white;
+					border:1px solid black;
+				}
+			}
+
+			label
+			{
+				font-size:small;
+				width:5em;
+				display:inline-block;
+			}
+
+			.gh_setting>label {width:56%; display:inline; padding-right:4%}
+			.gh_setting>input[type=text] {width:40%; display:inline}
+
+			.ui-tooltip
+			{
+				width:auto;
+				font-size:small;
+			}
+			
+			.gh_setting {height:1.1em}
+
+			.gh_setting, fieldset
+			{
+				padding:1px;
+				margin:1px;
+				float:left;
+				width:100%;
+				max-width:250px;
+			}
+			
+			fieldset {clear:both}
+			
+			.gh_setting:hover { background-color: #FFFFDD }
+
+			fieldset>legend {font-weight:bold}
+
+			input[type=button], input[type=submit]
+			{
+				background-color: #4CAF50;
+				border: none;
+				color: white;
+				text-decoration: none;
+				margin: 4px 2px;
+				cursor: pointer;
+				width: 10em;
+			}
+
+			#GH_MSET_TEMP_STRING,
+			div.current_setting input
+			{width:80%; font-size:65%}
+
+			.MSET {width:70%}
+			
+			.examples {font-size:smaller}
+		</style>
+		<script>
+			/* SUPPLIES IE11 COMPATIBILITY WITH FUNCTIONS IN CASE THEY DON'T EXIST */
+			if( ![].forEach)
+			{
+				Array.prototype.forEach = function(callback)
+				{
+					for( var i=0, l=this.length; i<l; i++) callback(this[i]);
+				};
+			}
+			
+			if (!Array.prototype.find) {
+			  Array.prototype.find = function(predicate) {
+				if (this == null) {
+				  throw new TypeError('Array.prototype.find called on null or undefined');
+				}
+				if (typeof predicate !== 'function') {
+				  throw new TypeError('predicate must be a function');
+				}
+				var list = Object(this);
+				var length = list.length >>> 0;
+				var thisArg = arguments[1];
+				var value;
+
+				for (var i = 0; i < length; i++) {
+				  value = list[i];
+				  if (predicate.call(thisArg, value, i, list)) {
+					return value;
+				  }
+				}
+				return undefined;
+			  };
+			}
+
+			if (!Array.prototype.indexOf) {
+			  Array.prototype.indexOf = function indexOf(member, startFrom) {
+				/*
+				In non-strict mode, if the `this` variable is null or undefined, then it is
+				set to the window object. Otherwise, `this` is automatically converted to an
+				object. In strict mode, if the `this` variable is null or undefined, a
+				`TypeError` is thrown.
+				*/
+				if (this == null) {
+				  throw new TypeError("Array.prototype.indexOf() - can't convert `" + this + "` to object");
+				}
+
+				var
+				  index = isFinite(startFrom) ? Math.floor(startFrom) : 0,
+				  that = this instanceof Object ? this : new Object(this),
+				  length = isFinite(that.length) ? Math.floor(that.length) : 0;
+
+				if (index >= length) {
+				  return -1;
+				}
+
+				if (index < 0) {
+				  index = Math.max(length + index, 0);
+				}
+
+				if (member === undefined) {
+				  /*
+					Since `member` is undefined, keys that don't exist will have the same
+					value as `member`, and thus do need to be checked.
+				  */
+				  do {
+					if (index in that && that[index] === undefined) {
+					  return index;
+					}
+				  } while (++index < length);
+				} else {
+				  do {
+					if (that[index] === member) {
+					  return index;
+					}
+				  } while (++index < length);
+				}
+
+				return -1;
+			  };
+			}
+			/* IE COMPATIBILITY END */
+			
+			/* JQUERY DESERIALIZE HELPER */
+			
+			jQuery.fn.deserialize = function (data) {
+				var f = this,
+					map = {},
+					find = function (selector) { return f.is("form") ? f.find(selector) : f.filter(selector); };
+				//Get map of values
+				jQuery.each(data.split("&"), function () {
+					var nv = this.split("="),
+						n = decodeURIComponent(nv[0]),
+						v = nv.length > 1 ? decodeURIComponent(nv[1]) : null;
+					if (!(n in map)) {
+						map[n] = [];
+					}
+					map[n].push(v);
+				})
+				//Set values for all form elements in the data
+				jQuery.each(map, function (n, v) {
+					find("[name='" + n + "']").val(v);
+				})
+				//Clear all form elements not in form data
+				find("input:text,select,textarea").each(function () {
+					if (!(jQuery(this).attr("name") in map)) {
+						jQuery(this).val("");
+					}
+				})
+				find("input:checkbox:checked,input:radio:checked").each(function () {
+					if (!(jQuery(this).attr("name") in map)) {
+						this.checked = false;
+					}
+				})
+				return this;
+			};
+			
+			/* JQUERY DESERIALIZE END */
+
+
+			
+			/* plugin calls */
+			
+			//Send passes a string to be sent straight to Genie as input, whatever that command it (no filtering)
+			//E.g., CS_Send("put #var hello world");
+			function CS_Send(data)
+			{
+				if ('Send' in window.external)
+					window.external.Send(data);
+				else
+					console.log("'Send' function does not exist in external context");
+			}
+			
+			//SetValues requires json string; use JSON.stringify(json_formatted_data) to correctly send it.
+			//Arrays are not allowed.
+			//E.g., {key: value, key2: value2}
+			function CS_SetValues(jsonstring)
+			{
+				if ('SetValues' in window.external)
+					window.external.SetValues(jsonstring);
+				else
+					console.log("'SetValues' function does not exist in external context");
+			}
+
+			//GetValue requires a string global variable name without the preceding $
+			//E.g., CS_GetValue("health") returns $health
+			function CS_GetValue(varname)
+			{
+				if ('GetValue' in window.external)
+					return window.external.GetValue(varname);
+				else
+					console.log("'GetValue' function does not exist in external context");
+				return "";
+			}
+			
+			//Receive is invoked by the plugin to pass data from Genie normally by script or user
+			//which is a string converted to an object.
+			//E.g., CS_Receive(data) => now to inspect data and see what it contains
+			function CS_Receive(data)
+			{
+				//do nothing
+				//document.body.innerText = data;
+			}
+			/* end of plugin calls */
+			
+			
+
+			//Literally just send the command back to Genie to have .hunt script process it,
+			//because the values are interpreted into various settings
+			function setDefault()
+			{
+				console.log(JSON.stringify( $(".gh_setting").serializeArray() ));
+			
+				//get the current built string
+				var dset_string = $("#GH_MSET_TEMP_STRING").val();
+				//set the appropriate line at the bottom
+				$("#DSET").val( dset_string );
+				console.log("Sending string: .hunt DSET " + dset_string);
+				//pass that data to Genie as an action
+				CS_Send(".hunt DSET " + dset_string);
+			}
+			
+			//actually set the multi strings because they are interpreted raw when
+			//.hunt executes each one
+			function setMulti()
+			{
+				//set the multi string here in the document...
+				//get the right ID name
+				var multi_var = "GH_MULTI_" + ($("#MSET_INDEX").val());
+				//set the appropriate line at the bottom with the current string built
+				$("#" + multi_var).val( $("#GH_MSET_TEMP_STRING").val() );
+				
+				//then set the variables in Genie
+				var jsondata = {};
+				var numMulti = 0;
+				var gapExists = false;
+				
+				for (var i=1;i<11;++i)
+				{
+					multi_var = "GH_MULTI_" + i;
+					var multi_string = $("#" + multi_var).val();
+					jsondata[multi_var] = multi_string;
+
+					if (multi_string && !gapExists)
+						numMulti = i;
+					else
+						gapExists = true;
+				}
+				jsondata["GH_MULTI_NUM"] = numMulti;
+				jsondata["gh.multi_weapon." + ($("#MSET_INDEX").val()) + ".serialized"] =
+					$("#gh_form").serialize();
+
+				CS_SetValues(JSON.stringify(jsondata));
+			}
+			
+			function updateForm()
+			{			
+				var multi_var_serialized = "gh.multi_weapon." + ($("#MSET_INDEX").val()) + ".serialized";			
+				var jsondata = (CS_GetValue(multi_var_serialized));
+				$('#gh_form').deserialize(jsondata);
+				buildTempString();
+			}
+			
+			function clearForm()
+			{
+				$("#gh_form")[0].reset();
+				$("#GH_MSET_TEMP_STRING").val("");
+			}
+			
+			function buildTempString()
+			{
+				var result = "";
+				var fields = $("#gh_form").serializeArray();
+				$.each(fields, function(i,field){
+					if (fieldIgnoreList.indexOf(field.name) >= 0 )
+						return;
+				
+					var e = $("#"+field.name);
+					
+					if (field.value){
+						if (e.attr('child')){
+							var childval = _getChildValue(e.attr('child'));
+
+							if (e.attr('requiresChild'))
+							{
+								if (childval)
+									result += field.value + " " + childval + " ";
+							}
+							else
+								result += field.value + " " + childval + " ";
+						}
+						else
+						{
+							result += field.value + " ";
+						}
+					}
+				});
+				
+				$("#GH_MSET_TEMP_STRING").val( result );
+			}
+			
+			//local recursive function to get child values
+			function _getChildValue(name)
+			{
+				var fields = $("#gh_form").serializeArray();
+				var child = fields.find(function(o){
+					return (o.name == name)
+				});
+
+				if (child.value)
+				{
+					var e = $("#"+name);						
+					
+					//if this node has its own child...
+					if (e.attr('child'))
+					{
+						var childval = _getChildValue(e.attr('child'));
+						
+						if (e.attr('requiresChild'))
+						{
+							if (childval)
+								return child.value + " " + childval;
+						}
+						else
+							return child.value + " " + childval;
+					}
+					else
+					{
+						return child.value;
+					}
+				}
+				
+				return "";
+			}
+
+			$( function() {
+				//Build the form via formbuilder.js and the imported
+				buildForm("#gh_form", "./form.json");
+			
+				//never allow submissions! Everyone has to be handled on the same page!
+				$("#gh_form").submit(function( event ) {
+					event.preventDefault();
+				});
+
+				//add the correct value to the 'multi' variable whenever an element changes
+				//all this does is inline string-building
+				$("[type=text],[type=radio],select,[type=checkbox]").change(function(event) {
+					var fields = $("#gh_form").serializeArray();
+					
+					buildTempString();
+				});
+
+				//build the list of current MULTI settings
+				for(var i=1;i<11;++i)
+				{
+					var multi_var = "GH_MULTI_"+i;
+					var multi_string = CS_GetValue(multi_var);
+					console.log(multi_var + " = " + multi_string);
+
+					if (multi_string)
+						$("#"+multi_var).val(multi_string);
+				}
+
+				/*
+				** Figuring out what the DSET default settings values 'should' 
+				** be requires interpreting the values back into strings.
+				** That's a task by itself, so better to just disregard that
+				** for now and just let people set their default values based
+				** on what they see instead.
+				*/
+				
+				$(".examples").toggle();
+				$("#toggle_examples").click(function(){
+					$(".examples").toggle();
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<div class="content">
+			<div class="fixed-header">
+				<div>
+					<label for="GH_MSET_TEMP_STRING">String Being Built:</label>
+					<input type="text" id="GH_MSET_TEMP_STRING" name="GH_MSET_TEMP_STRING" />
+				</div>
+				<div>
+					<input type="button" id="GH_DSET" name="GH_DSET" onclick="setDefault();" value="Set as Default" />
+					<input type="button" id="GH_MSET" name="GH_MSET" onclick="setMulti();" value="Set/Replace Multi" />
+					<select id="MSET_INDEX" name="MSET_INDEX">
+						<option value="1">1</option>
+						<option value="2">2</option>
+						<option value="3">3</option>
+						<option value="4">4</option>
+						<option value="5">5</option>
+						<option value="6">6</option>
+						<option value="7">7</option>
+						<option value="8">8</option>
+						<option value="9">9</option>
+						<option value="10">10</option>
+					</select>
+					<input type="button" id="GH_UPDATEFORM" name="GH_UPDATEFORM" onclick="updateForm();" value="Update Form" />
+					<input type="button" id="GH_CLEARFORM" name="GH_CLEARFORM" onclick="clearForm();" value="Clear Form" />
+				</div>
+				<div>
+					<p>Check your current settings at the bottom of the page. Hover over any label to see a description of the option.</p>
+				</div>
+				<div>
+					<input id="toggle_examples" type="button" value="See Examples" />
+					<div class="examples">
+						<ul>
+						<li>appr hunt buff powerp analyze 1 tactics wear tie lootcoins lootgems collectible [weapon]</li>
+						<li>appr hunt buff powerp analyze 1 wear tie lootcoins lootgems collectible [weapon]</li>
+						<li>appr hunt tactics wear tie lootall [weapon]</li>
+						<li>appr hunt buff powerp wear tie lootall brawl</li>
+						<li>appr hunt buff powerp tactics wear tie lootall throw [weapon]</li>
+						<li>appr hunt buff powerp tactics wear tie lootall tm [spell and weapon]</li>
+						<li>appr hunt buff ritual ABSOLUTION 525 powerp analyze 1 tactics wear tie lootcoins lootgems collectible construct [weapon]</li>
+						<li>appr hunt buff ritual ABSOLUTION 525 powerp wear tie lootcoins lootgems collectible ambush empath</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+
+			<form id="gh_form">
+			</form>
+			
+			<div class="row">
+				<div class="column">
+					<h2>Current Settings</h2>
+					<p class="warning"><em>You MUST not have any gaps! If you set lines 1 and 3, leaving line 2 blank you're wrong.</em></p>
+					<div class="current_setting"><label for="DSET" title="Only updates when setting the default, it doesn't check what your current default is.">DSET:</label><input type="text" enabled="false" id="DSET" name="DSET" class="MSET" /></div>
+					<div class="current_setting"><label for="GH_MULTI_1">Multi 1:</label><input type="text" enabled="false"  id="GH_MULTI_1"  name="GH_MULTI_1" class="MSET" /></div>
+					<div class="current_setting"><label for="GH_MULTI_2">Multi 2:</label><input type="text" enabled="false"  id="GH_MULTI_2"  name="GH_MULTI_2" class="MSET" /></div>
+					<div class="current_setting"><label for="GH_MULTI_3">Multi 3:</label><input type="text" enabled="false"  id="GH_MULTI_3"  name="GH_MULTI_3" class="MSET" /></div>
+					<div class="current_setting"><label for="GH_MULTI_4">Multi 4:</label><input type="text" enabled="false"  id="GH_MULTI_4"  name="GH_MULTI_4" class="MSET" /></div>
+					<div class="current_setting"><label for="GH_MULTI_5">Multi 5:</label><input type="text" enabled="false"  id="GH_MULTI_5"  name="GH_MULTI_5" class="MSET" /></div>
+					<div class="current_setting"><label for="GH_MULTI_6">Multi 6:</label><input type="text" enabled="false"  id="GH_MULTI_6"  name="GH_MULTI_6" class="MSET" /></div>
+					<div class="current_setting"><label for="GH_MULTI_7">Multi 7:</label><input type="text" enabled="false"  id="GH_MULTI_7"  name="GH_MULTI_7" class="MSET" /></div>
+					<div class="current_setting"><label for="GH_MULTI_8">Multi 8:</label><input type="text" enabled="false"  id="GH_MULTI_8"  name="GH_MULTI_8" class="MSET" /></div>
+					<div class="current_setting"><label for="GH_MULTI_9">Multi 9:</label><input type="text" enabled="false"  id="GH_MULTI_9"  name="GH_MULTI_9" class="MSET" /></div>
+					<div class="current_setting"><label for="GH_MULTI_10">Multi 10:</label><input type="text" enabled="false" id="GH_MULTI_10" name="GH_MULTI_10" class="MSET" /></div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
