@@ -1,9 +1,9 @@
 <Genie>
-  <Windows WindowCount="27">
+  <Windows WindowCount="28">
     <Main Maximized="True" />
     <MonoFont Family="Lucida Console" Size="9.75" Style="Regular" />
     <InputFont Family="Lucida Console" Size="9" Style="Regular" />
-    <Game ID="main" Name="Game" Height="645" Width="1357" Left="0" Top="330" TimeStamp="False" Colors="WhiteSmoke, Black" NameListOnly="False">
+    <Game ID="main" Name="Game" Height="636" Width="1357" Left="0" Top="330" TimeStamp="False" Colors="WhiteSmoke, Black" NameListOnly="False">
       <Font Family="Verdana" Size="11.25" Style="Regular" />
     </Game>
     <Window1 ID="inv" Name="Inventory" Height="200" Width="300" Left="10" Top="10" Visible="False" TimeStamp="False" Colors="WhiteSmoke, Black" NameListOnly="False">
@@ -21,7 +21,7 @@
     <Window5 ID="deaths" Name="Deaths" IfClosed="log" Height="118" Width="163" Left="680" Top="93" Visible="False" TimeStamp="True" Colors="WhiteSmoke, Black" NameListOnly="False">
       <Font Family="Verdana" Size="9" Style="Regular" />
     </Window5>
-    <Window6 ID="log" Name="Log" Height="592" Width="559" Left="1357" Top="383" Visible="True" TimeStamp="True" Colors="WhiteSmoke, Black" NameListOnly="False">
+    <Window6 ID="log" Name="Log" Height="583" Width="559" Left="1357" Top="383" Visible="True" TimeStamp="True" Colors="WhiteSmoke, Black" NameListOnly="False">
       <Font Family="Verdana" Size="11.25" Style="Regular" />
     </Window6>
     <Window7 ID="room" Name="Room" Height="190" Width="1357" Left="0" Top="0" Visible="True" TimeStamp="False" Colors="WhiteSmoke, Black" NameListOnly="False">
@@ -87,6 +87,9 @@
     <Window27 ID="combat" Name="Combat" IfClosed="main" Height="156" Width="1357" Left="0" Top="174" Visible="True" TimeStamp="False" Colors="WhiteSmoke, Black" NameListOnly="False">
       <Font Family="Verdana" Size="9.75" Style="Regular" />
     </Window27>
+    <Window28 ID="debug" Name="Debug" Height="200" Width="300" Left="10" Top="10" Visible="False" TimeStamp="False" Colors="WhiteSmoke, Black" NameListOnly="False">
+      <Font Family="Verdana" Size="9" Style="Regular" />
+    </Window28>
   </Windows>
   <Settings>
   </Settings>

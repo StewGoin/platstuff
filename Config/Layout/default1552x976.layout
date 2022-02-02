@@ -27,7 +27,7 @@
     <Window7 ID="room" Name="Room" Height="213" Width="989" Left="0" Top="0" Visible="True" TimeStamp="False" Colors="WhiteSmoke, Black" NameListOnly="False">
       <Font Family="Verdana" Size="9.75" Style="Regular" />
     </Window7>
-    <Window8 ID="experience" Name="Experience" Height="596" Width="322" Left="1210" Top="0" Visible="True" TimeStamp="False" Colors="WhiteSmoke, Black" NameListOnly="False">
+    <Window8 ID="experience" Name="Experience" Height="596" Width="287" Left="1245" Top="0" Visible="True" TimeStamp="False" Colors="WhiteSmoke, Black" NameListOnly="False">
       <Font Family="Lucida Console" Size="11.25" Style="Regular" />
     </Window8>
     <Window9 ID="time" Name="Time" Height="94" Width="221" Left="989" Top="0" Visible="False" TimeStamp="False" Colors="WhiteSmoke, Black" NameListOnly="False">
@@ -78,8 +78,8 @@
     <Window24 ID="objects" Name="Objects" Height="176" Width="221" Left="893" Top="94" Visible="False" TimeStamp="False" Colors="WhiteSmoke, Black" NameListOnly="False">
       <Font Family="Verdana" Size="8.25" Style="Regular" />
     </Window24>
-    <Window25 ID="percwindow" Name="percWindow" IfClosed="" Height="269" Width="221" Left="989" Top="0" Visible="True" TimeStamp="False" Colors="WhiteSmoke, Black" NameListOnly="False">
-      <Font Family="Verdana" Size="9" Style="Regular" />
+    <Window25 ID="percwindow" Name="percWindow" IfClosed="" Height="269" Width="256" Left="989" Top="0" Visible="True" TimeStamp="False" Colors="WhiteSmoke, Black" NameListOnly="False">
+      <Font Family="Verdana" Size="11.25" Style="Regular" />
     </Window25>
     <Window26 ID="fluffmuff" Name="FluffMuff" Height="441" Width="992" Left="37" Top="137" Visible="False" TimeStamp="True" Colors="WhiteSmoke, Black" NameListOnly="False">
       <Font Family="Verdana" Size="12" Style="Regular" />
